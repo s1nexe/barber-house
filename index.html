@@ -302,7 +302,55 @@
     <section class="section gallery" id="gallery" aria-labelledby="gallery-title">
       <div class="container">
         <h2 class="section__title" id="gallery-title">Галерея</h2>
-        <p>Раздел появится на этапе 6.</p>
+
+        <!-- Каждое фото в двух размерах: 600px для сетки и 1200px для просмотра.
+             srcset + sizes: браузер сам выбирает подходящий файл под экран.
+             Ссылка ведёт на большую версию: без JS фото откроется в новой вкладке,
+             на этапе 8 скрипт будет открывать его в лайтбоксе. -->
+        <ul class="gallery__grid">
+          <li class="gallery__item">
+            <a class="gallery__link" href="assets/images/gallery/chairs-gold-1200.webp">
+              <img class="gallery__img" src="assets/images/gallery/chairs-gold-600.webp" srcset="assets/images/gallery/chairs-gold-600.webp 600w, assets/images/gallery/chairs-gold-1200.webp 1200w" sizes="(min-width: 1024px) 300px, 50vw" width="600" height="400" loading="lazy" decoding="async" alt="Чёрно-золотые барберские кресла у арочных зеркал с подсветкой">
+            </a>
+          </li>
+          <li class="gallery__item">
+            <a class="gallery__link" href="assets/images/gallery/razor-gold-1200.webp">
+              <img class="gallery__img" src="assets/images/gallery/razor-gold-600.webp" srcset="assets/images/gallery/razor-gold-600.webp 600w, assets/images/gallery/razor-gold-1200.webp 1200w" sizes="(min-width: 1024px) 300px, 50vw" width="600" height="400" loading="lazy" decoding="async" alt="Опасная бритва с золотой рукоятью, ножницы и расчёска на чёрной ткани">
+            </a>
+          </li>
+          <li class="gallery__item">
+            <a class="gallery__link" href="assets/images/gallery/hall-dark-1200.webp">
+              <img class="gallery__img" src="assets/images/gallery/hall-dark-600.webp" srcset="assets/images/gallery/hall-dark-600.webp 600w, assets/images/gallery/hall-dark-1200.webp 1200w" sizes="(min-width: 1024px) 300px, 50vw" width="600" height="411" loading="lazy" decoding="async" alt="Зал барбершопа с рядом кожаных кресел в тёплом приглушённом свете">
+            </a>
+          </li>
+          <li class="gallery__item">
+            <a class="gallery__link" href="assets/images/gallery/scissors-wood-1200.webp">
+              <img class="gallery__img" src="assets/images/gallery/scissors-wood-600.webp" srcset="assets/images/gallery/scissors-wood-600.webp 600w, assets/images/gallery/scissors-wood-1200.webp 1200w" sizes="(min-width: 1024px) 300px, 50vw" width="600" height="400" loading="lazy" decoding="async" alt="Парикмахерские ножницы и опасная бритва на деревянной столешнице">
+            </a>
+          </li>
+          <li class="gallery__item">
+            <a class="gallery__link" href="assets/images/gallery/vintage-chair-1200.webp">
+              <img class="gallery__img" src="assets/images/gallery/vintage-chair-600.webp" srcset="assets/images/gallery/vintage-chair-600.webp 600w, assets/images/gallery/vintage-chair-1200.webp 1200w" sizes="(min-width: 1024px) 300px, 50vw" width="600" height="900" loading="lazy" decoding="async" alt="Винтажное барберское кресло у открытой двери в лучах солнца">
+            </a>
+          </li>
+          <li class="gallery__item">
+            <a class="gallery__link" href="assets/images/gallery/tools-set-1200.webp">
+              <img class="gallery__img" src="assets/images/gallery/tools-set-600.webp" srcset="assets/images/gallery/tools-set-600.webp 600w, assets/images/gallery/tools-set-1200.webp 1200w" sizes="(min-width: 1024px) 300px, 50vw" width="600" height="400" loading="lazy" decoding="async" alt="Набор барберских инструментов: ножницы, бритва, расчёски и щётка">
+            </a>
+          </li>
+          <li class="gallery__item">
+            <a class="gallery__link" href="assets/images/gallery/clippers-shelf-1200.webp">
+              <img class="gallery__img" src="assets/images/gallery/clippers-shelf-600.webp" srcset="assets/images/gallery/clippers-shelf-600.webp 600w, assets/images/gallery/clippers-shelf-1200.webp 1200w" sizes="(min-width: 1024px) 300px, 50vw" width="600" height="400" loading="lazy" decoding="async" alt="Машинки для стрижки и фен на чёрной настенной полке">
+            </a>
+          </li>
+          <li class="gallery__item">
+            <a class="gallery__link" href="assets/images/gallery/razor-wood-1200.webp">
+              <img class="gallery__img" src="assets/images/gallery/razor-wood-600.webp" srcset="assets/images/gallery/razor-wood-600.webp 600w, assets/images/gallery/razor-wood-1200.webp 1200w" sizes="(min-width: 1024px) 300px, 50vw" width="600" height="900" loading="lazy" decoding="async" alt="Опасная бритва крупным планом на краю деревянного стола">
+            </a>
+          </li>
+        </ul>
+
+        <p class="gallery__note">Фотографии иллюстративные: интерьеры и инструменты с фотостоков Unsplash и Pexels.</p>
       </div>
     </section>
 
