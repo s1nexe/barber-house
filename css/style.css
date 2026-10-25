@@ -5,18 +5,329 @@
    Именование классов: БЭМ (block, block__element, block--modifier).
    ========================================================= */
 
-/* === 1. ПЕРЕМЕННЫЕ (дизайн-токены) — этап 2 === */
+/* === 1. ПЕРЕМЕННЫЕ (дизайн-токены) === */
 
-/* === 2. СБРОС И БАЗОВЫЕ СТИЛИ — этап 2 === */
+:root {
+  /* Цвета */
+  --color-bg: #0E0E0E;              /* основной фон */
+  --color-bg-alt: #161616;          /* фон чередующихся секций */
+  --color-surface: #1E1E1E;         /* карточки */
+  --color-text: #EDEDED;            /* основной текст */
+  --color-text-muted: #A0A0A0;      /* второстепенный текст */
+  --color-gold: #C9A54C;            /* акценты, кнопки, цены */
+  --color-gold-light: #E2C77E;      /* наведение */
+  --color-gold-dark: #A8873A;       /* нажатие */
+  --color-on-gold: #0E0E0E;         /* текст на золотом фоне */
+  --color-line: rgba(201, 165, 76, 0.25); /* тонкие золотые разделители */
+  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.45);
 
-/* ВРЕМЕННО (этап 1): высокие секции, чтобы проверить прокрутку по меню.
-   Удалить на этапе 2. */
-section {
-  min-height: 100vh;
-  border-bottom: 1px dashed #999;
+  /* Шрифты: после основного — запасные, если Google Fonts не загрузился */
+  --font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Размеры текста. clamp(минимум, «резиновое» значение, максимум) —
+     заголовок плавно растёт вместе с шириной экрана, без скачков */
+  --fs-small: 0.875rem;                               /* 14px */
+  --fs-base: 1rem;                                    /* 16px */
+  --fs-lead: 1.125rem;                                /* 18px */
+  --fs-h3: 1.375rem;                                  /* 22px */
+  --fs-h2: clamp(1.875rem, 1.4rem + 2.4vw, 2.75rem);  /* 30 → 44px */
+  --fs-h1: clamp(2.75rem, 1.8rem + 5vw, 5.5rem);      /* 44 → 88px */
+  --lh-base: 1.6;
+  --lh-heading: 1.15;
+  --ls-wide: 0.12em;                                  /* разрядка для кнопок и надписей капсом */
+
+  /* Отступы: одна шкала на весь сайт */
+  --space-1: 0.25rem;  /* 4px  */
+  --space-2: 0.5rem;   /* 8px  */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2rem;     /* 32px */
+  --space-7: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+  --space-section: clamp(4rem, 3rem + 5vw, 7.5rem); /* вертикальный отступ секций: 64 → 120px */
+
+  /* Раскладка */
+  --container-width: 1200px;
+  --container-padding: 1rem;  /* боковой отступ на телефоне — 16px */
+  --header-height: 72px;
+  --radius: 2px;              /* почти острые углы смотрятся строже и дороже */
+
+  /* Анимации */
+  --transition: 0.25s ease;
 }
 
-/* === 3. ОБЩИЕ КОМПОНЕНТЫ: container, btn, section__title, skip-link — этап 2 === */
+@media (min-width: 768px) {
+  :root {
+    --container-padding: 1.5rem;
+    --header-height: 80px;
+  }
+}
+
+/* === 2. СБРОС И БАЗОВЫЕ СТИЛИ === */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* ширина элемента включает padding и border */
+}
+
+body,
+h1, h2, h3, h4,
+p,
+ul, ol,
+figure,
+blockquote,
+dl, dd {
+  margin: 0;
+}
+
+/* Списки с классом (меню, карточки) — без маркеров; обычные списки в тексте не трогаем */
+ul[class],
+ol[class] {
+  padding: 0;
+  list-style: none;
+}
+
+html {
+  -webkit-text-size-adjust: 100%; /* iPhone не увеличивает текст при повороте экрана */
+  text-size-adjust: 100%;
+}
+
+/* Плавная прокрутка по якорям — только если человек не отключил анимации */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  text-wrap: balance; /* ровные строки в многострочных заголовках */
+}
+
+img,
+picture {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--color-gold);
+  text-underline-offset: 0.2em;
+}
+
+/* Рамка фокуса видна только при навигации с клавиатуры, не при клике мышью */
+:focus-visible {
+  outline: 2px solid var(--color-gold-light);
+  outline-offset: 3px;
+}
+
+::selection {
+  background-color: var(--color-gold);
+  color: var(--color-on-gold);
+}
+
+/* При переходе по якорю закреплённая шапка не перекрывает заголовок секции */
+section[id] {
+  scroll-margin-top: var(--header-height);
+}
+
+/* Скрыть визуально, но оставить для экранных дикторов */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* === 3. ОБЩИЕ КОМПОНЕНТЫ === */
+
+/* --- Контейнер: ограничивает ширину контента и даёт боковые отступы --- */
+.container {
+  width: 100%;
+  max-width: calc(var(--container-width) + 2 * var(--container-padding));
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+/* --- Ссылка «Перейти к содержимому»: спрятана за верхним краем, выезжает при фокусе --- */
+.skip-link {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 1000;
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--color-gold);
+  color: var(--color-on-gold);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform var(--transition);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* --- Секция --- */
+.section {
+  padding-block: var(--space-section);
+}
+
+.section--alt {
+  background-color: var(--color-bg-alt);
+}
+
+.section__title {
+  position: relative;
+  margin-bottom: var(--space-7);
+  padding-bottom: var(--space-5);
+  font-size: var(--fs-h2);
+  text-align: center;
+}
+
+/* Короткая золотая линия под заголовком */
+.section__title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 64px;
+  height: 2px;
+  background-color: var(--color-gold);
+  transform: translateX(-50%);
+}
+
+/* --- Кнопки --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px; /* удобно попадать пальцем (минимум 44px) */
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: var(--ls-wide);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    transform var(--transition);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Основная: золотая заливка */
+.btn--primary {
+  background-color: var(--color-gold);
+  color: var(--color-on-gold);
+}
+
+.btn--primary:active {
+  background-color: var(--color-gold-dark);
+  border-color: var(--color-gold-dark);
+}
+
+/* Контурная: только рамка, для второстепенных действий */
+.btn--outline {
+  background-color: transparent;
+  color: var(--color-gold);
+}
+
+.btn--outline:active {
+  background-color: var(--color-gold-dark);
+  border-color: var(--color-gold-dark);
+  color: var(--color-on-gold);
+}
+
+/* Наведение — только на устройствах с мышью: на телефоне эффект «залипал» бы после касания */
+@media (hover: hover) {
+  .btn--primary:hover {
+    background-color: var(--color-gold-light);
+    border-color: var(--color-gold-light);
+  }
+
+  .btn--outline:hover {
+    background-color: var(--color-gold);
+    color: var(--color-on-gold);
+  }
+}
+
+/* --- Карточка: основа для услуг и команды --- */
+.card {
+  padding: var(--space-6);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+.card__title {
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-h3);
+}
+
+.card__text {
+  color: var(--color-text-muted);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    border-color: var(--color-gold);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-4px);
+  }
+}
 
 /* === 4. HEADER И НАВИГАЦИЯ — этап 3 === */
 
@@ -36,4 +347,16 @@ section {
 
 /* === 12. FOOTER — этап 7 === */
 
-/* === 13. АНИМАЦИИ И prefers-reduced-motion — этап 8 === */
+/* === 13. АНИМАЦИИ И prefers-reduced-motion === */
+
+/* Если в системе включено «уменьшить движение» — отключаем все анимации и переходы.
+   Сами анимации появления блоков добавим на этапе 8. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

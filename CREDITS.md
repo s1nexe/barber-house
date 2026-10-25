@@ -13,7 +13,8 @@
 
 | Шрифт | Источник | Лицензия |
 |---|---|---|
-| _подключаются на этапе 2_ | | |
+| Playfair Display (заголовки) | [Google Fonts](https://fonts.google.com/specimen/Playfair+Display) | SIL Open Font License 1.1 |
+| Inter (основной текст) | [Google Fonts](https://fonts.google.com/specimen/Inter) | SIL Open Font License 1.1 |
 
 ## Иконки
 
