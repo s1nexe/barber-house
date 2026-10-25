@@ -19,6 +19,9 @@
   --color-gold-dark: #A8873A;       /* нажатие */
   --color-on-gold: #0E0E0E;         /* текст на золотом фоне */
   --color-line: rgba(201, 165, 76, 0.25); /* тонкие золотые разделители */
+  --color-gold-glow: rgba(201, 165, 76, 0.16);  /* мягкое свечение на фоне Hero */
+  --color-gold-faint: rgba(201, 165, 76, 0.035); /* едва заметная фактура */
+  --color-header-bg: rgba(14, 14, 14, 0.85);     /* полупрозрачная шапка */
   --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.45);
 
   /* Шрифты: после основного — запасные, если Google Fonts не загрузился */
@@ -53,6 +56,7 @@
   --container-padding: 1rem;  /* боковой отступ на телефоне — 16px */
   --header-height: 72px;
   --radius: 2px;              /* почти острые углы смотрятся строже и дороже */
+  --z-header: 100;            /* шапка поверх контента */
 
   /* Анимации */
   --transition: 0.25s ease;
@@ -329,9 +333,352 @@ section[id] {
   }
 }
 
-/* === 4. HEADER И НАВИГАЦИЯ — этап 3 === */
+/* === 4. HEADER И НАВИГАЦИЯ === */
 
-/* === 5. HERO — этап 3 === */
+/* --- Логотип (используется и в шапке, и в футере) --- */
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: var(--ls-wide);
+  color: var(--color-gold);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* --- Шапка: закреплена сверху, полупрозрачная с размытием фона --- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-header);
+  height: var(--header-height);
+  background-color: var(--color-header-bg);
+  border-bottom: 1px solid var(--color-line);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 100%;
+}
+
+.header__logo {
+  margin-right: auto; /* отталкивает остальные элементы вправо */
+}
+
+/* На самых узких экранах кнопка не помещается рядом с логотипом —
+   там она есть сразу на первом экране */
+.header__btn {
+  display: none;
+  padding-inline: var(--space-5);
+}
+
+/* --- Бургер (мобильное меню) --- */
+.burger {
+  order: 3; /* на телефоне — в правом углу, после кнопки записи */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px; /* визуально выравниваем линии по краю контейнера */
+  padding: 10px;
+}
+
+.burger__line {
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-gold);
+  transition:
+    transform var(--transition),
+    opacity var(--transition);
+}
+
+/* Открытое меню: три линии превращаются в крестик.
+   Атрибут aria-expanded будет переключать скрипт на этапе 8 */
+.burger[aria-expanded="true"] .burger__line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger[aria-expanded="true"] .burger__line:nth-child(2) {
+  opacity: 0;
+}
+
+.burger[aria-expanded="true"] .burger__line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* --- Навигация: на телефоне — полноэкранная панель под шапкой --- */
+.nav {
+  position: fixed;
+  top: 100%; /* сразу под шапкой */
+  left: 0;
+  right: 0;
+  height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height)); /* dvh учитывает панели браузера на телефоне */
+  padding: var(--space-7) var(--container-padding);
+  overflow-y: auto;
+  background-color: var(--color-bg); /* непрозрачный: текст страницы не просвечивает сквозь меню */
+}
+
+/* Прячем панель, только если работает JS (иначе её некому открыть).
+   visibility: hidden убирает ссылки и из фокуса клавиатуры */
+.js .nav {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-1rem);
+  transition:
+    opacity var(--transition),
+    transform var(--transition),
+    visibility var(--transition);
+}
+
+.js .nav.is-open {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+.nav__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.nav__link {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+@media (hover: hover) {
+  .nav__link:hover {
+    color: var(--color-gold);
+  }
+}
+
+/* --- Запасной вариант без JS: бургер скрыт, меню — прокручиваемая строка под логотипом --- */
+html:not(.js) {
+  --header-height: 112px;
+}
+
+html:not(.js) .header__inner {
+  flex-wrap: wrap;
+  align-content: center;
+  row-gap: var(--space-2);
+}
+
+html:not(.js) .burger {
+  display: none;
+}
+
+html:not(.js) .nav {
+  position: static;
+  order: 4;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  overflow-x: auto;
+  background: none;
+}
+
+html:not(.js) .nav__list {
+  flex-direction: row;
+  gap: var(--space-5);
+  white-space: nowrap;
+}
+
+html:not(.js) .nav__link {
+  padding: var(--space-1) 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+}
+
+@media (min-width: 576px) {
+  .header__btn {
+    display: inline-flex;
+  }
+}
+
+/* --- Десктоп: меню в одну строку, бургер не нужен --- */
+@media (min-width: 1024px) {
+  html:not(.js) {
+    --header-height: 80px;
+  }
+
+  .header__inner {
+    gap: var(--space-6);
+  }
+
+  .burger,
+  html:not(.js) .burger {
+    display: none;
+  }
+
+  .nav,
+  .js .nav,
+  html:not(.js) .nav {
+    position: static;
+    order: 0;
+    width: auto;
+    height: auto;
+    padding: 0;
+    overflow: visible;
+    background: none;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .nav__list,
+  html:not(.js) .nav__list {
+    flex-direction: row;
+    gap: var(--space-5);
+  }
+
+  .nav__link,
+  html:not(.js) .nav__link {
+    position: relative;
+    padding: var(--space-2) 0;
+    white-space: nowrap; /* «О нас» не разрывается на две строки */
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Золотая линия, «вырастающая» слева направо при наведении */
+  .nav__link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition);
+  }
+
+  @media (hover: hover) {
+    .nav__link:hover::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+@media (min-width: 1280px) {
+  .nav__list,
+  html:not(.js) .nav__list {
+    gap: var(--space-6);
+  }
+}
+
+/* === 5. HERO === */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh; /* svh — высота экрана телефона без «прыжков» при скрытии адресной строки */
+  padding-top: calc(var(--header-height) + var(--space-7));
+  padding-bottom: var(--space-8);
+  text-align: center;
+  background-color: var(--color-bg);
+  /* Слои фона сверху вниз:
+     1) плавный переход в цвет следующей секции внизу;
+     2) мягкое золотое свечение сверху;
+     3) тонкие диагональные линии — намёк на полосы барбер-столба */
+  background-image:
+    linear-gradient(to bottom, transparent 70%, var(--color-bg) 100%),
+    radial-gradient(ellipse 70% 55% at 50% 0%, var(--color-gold-glow), transparent 70%),
+    repeating-linear-gradient(135deg, var(--color-gold-faint) 0 1px, transparent 1px 28px);
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+/* Надпись над заголовком с золотыми чёрточками по бокам */
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.75rem;     /* на узком экране мельче и с меньшей разрядкой, */
+  font-weight: 500;
+  letter-spacing: 0.15em; /* чтобы надпись влезла в одну строку */
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.hero__eyebrow::before,
+.hero__eyebrow::after {
+  content: "";
+  flex-shrink: 0;
+  width: 20px;
+  height: 1px;
+  background-color: var(--color-gold);
+}
+
+.hero__title {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+}
+
+.hero__text {
+  max-width: 36rem;
+  font-size: var(--fs-lead);
+  color: var(--color-text-muted);
+}
+
+/* На телефоне кнопки друг под другом во всю ширину — по ним легко попасть пальцем */
+.hero__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 20rem;
+  margin-top: var(--space-3);
+}
+
+@media (min-width: 576px) {
+  .hero__eyebrow {
+    gap: var(--space-3);
+    font-size: var(--fs-small);
+    letter-spacing: 0.3em;
+  }
+
+  .hero__eyebrow::before,
+  .hero__eyebrow::after {
+    width: 32px;
+  }
+
+  .hero__actions {
+    flex-direction: row;
+    justify-content: center;
+    width: auto;
+    max-width: none;
+  }
+}
 
 /* === 6. ABOUT — этап 4 === */
 

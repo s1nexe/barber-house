@@ -23,6 +23,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap">
 
   <link rel="stylesheet" href="css/style.css">
+  <!-- Класс js на <html> говорит стилям: «скрипты работают».
+       Только тогда мобильное меню прячется за бургер; без JS меню остаётся видимым.
+       Стоит в head до отрисовки страницы, чтобы меню не «мигало» при загрузке. -->
+  <script>document.documentElement.classList.add('js');</script>
   <!-- defer: скрипт загружается параллельно и запускается, когда HTML уже разобран -->
   <script src="js/main.js" defer></script>
 </head>
@@ -33,7 +37,7 @@
   <!-- ===================== HEADER ===================== -->
   <header class="header">
     <div class="container header__inner">
-      <a class="logo" href="#hero" aria-label="BARBER HOUSE — на главный экран">BARBER HOUSE</a>
+      <a class="logo header__logo" href="#hero" aria-label="BARBER HOUSE — на главный экран">BARBER HOUSE</a>
 
       <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Открыть меню">
         <span class="burger__line"></span>
