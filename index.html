@@ -95,6 +95,16 @@
       <path d="M8 14c1 1.3 2.4 2 4 2s3-.7 4-2"/>
       <path d="M9 9.5v.5M15 9.5v.5"/>
     </symbol>
+    <!-- Метка на карте -->
+    <symbol id="icon-pin" viewBox="0 0 24 24">
+      <path d="M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21z"/>
+      <circle cx="12" cy="9.5" r="2.5"/>
+    </symbol>
+    <!-- Бумажный самолётик — сообщение в мессенджер -->
+    <symbol id="icon-send" viewBox="0 0 24 24">
+      <path d="M21 3 3 10.5l7 2.5 2.5 7z"/>
+      <path d="M21 3 10 13"/>
+    </symbol>
     <!-- Силуэт — вместо фото мастера -->
     <symbol id="icon-person" viewBox="0 0 24 24">
       <circle cx="12" cy="8" r="4"/>
@@ -358,8 +368,44 @@
     <section class="section section--alt contacts" id="contacts" aria-labelledby="contacts-title">
       <div class="container">
         <h2 class="section__title" id="contacts-title">Контакты</h2>
-        <p>Раздел появится на этапе 7.</p>
-        <a class="btn btn--primary" href="#contacts" data-booking>Записаться</a>
+
+        <div class="contacts__inner">
+          <!-- <address> — семантический тег для контактной информации.
+               Все данные — явные заглушки: реального адреса и телефона у учебного проекта нет -->
+          <address class="contacts__info">
+            <dl class="contacts__list">
+              <div class="contacts__item">
+                <dt class="contacts__label">
+                  <svg class="icon contacts__icon" aria-hidden="true"><use href="#icon-pin"></use></svg>
+                  Адрес
+                </dt>
+                <dd class="contacts__value contacts__value--placeholder">Адрес появится позже</dd>
+              </div>
+              <div class="contacts__item">
+                <dt class="contacts__label">
+                  <svg class="icon contacts__icon" aria-hidden="true"><use href="#icon-clock"></use></svg>
+                  Часы работы
+                </dt>
+                <dd class="contacts__value">Ежедневно, 10:00–22:00 <span class="contacts__badge">демо</span></dd>
+              </div>
+              <div class="contacts__item">
+                <dt class="contacts__label">
+                  <svg class="icon contacts__icon" aria-hidden="true"><use href="#icon-send"></use></svg>
+                  Запись
+                </dt>
+                <dd class="contacts__value">Через Telegram — ссылка появится позже</dd>
+              </div>
+            </dl>
+
+            <a class="btn btn--primary contacts__btn" href="#contacts" data-booking>Записаться</a>
+          </address>
+
+          <!-- Заглушка вместо карты: встраивать настоящую карту без реального адреса нельзя -->
+          <div class="contacts__map" role="img" aria-label="Место для карты: появится после указания адреса">
+            <svg class="icon contacts__map-icon" aria-hidden="true"><use href="#icon-pin"></use></svg>
+            <p class="contacts__map-text">Карта появится после указания адреса</p>
+          </div>
+        </div>
       </div>
     </section>
 

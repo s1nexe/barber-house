@@ -980,9 +980,144 @@ html:not(.js) .nav__link {
   }
 }
 
-/* === 11. CONTACTS — этап 7 === */
+/* === 11. CONTACTS === */
 
-/* === 12. FOOTER — этап 7 === */
+/* Телефон: информация, под ней карта. Десктоп: две колонки */
+.contacts__inner {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.contacts__info {
+  font-style: normal; /* браузеры по умолчанию делают <address> курсивом */
+}
+
+.contacts__list {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.contacts__item {
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.contacts__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.contacts__icon {
+  font-size: 20px;
+}
+
+.contacts__value {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-lead);
+  font-variant-numeric: lining-nums; /* ровные цифры во времени работы */
+}
+
+/* Заглушка выглядит как заглушка: приглушённый цвет и курсив */
+.contacts__value--placeholder {
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+/* Маленькая метка «демо» рядом с выдуманными данными */
+.contacts__badge {
+  display: inline-block;
+  margin-left: var(--space-2);
+  padding: 0 var(--space-2);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  vertical-align: middle;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+.contacts__btn {
+  margin-top: var(--space-6);
+}
+
+/* Заглушка карты: «сетка улиц» из двух слоёв тонких линий */
+.contacts__map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: 280px;
+  padding: var(--space-6);
+  text-align: center;
+  background-color: var(--color-surface);
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+.contacts__map-icon {
+  font-size: 48px;
+  color: var(--color-gold);
+}
+
+.contacts__map-text {
+  max-width: 16rem;
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 1024px) {
+  .contacts__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+    align-items: stretch; /* карта по высоте равна колонке с информацией */
+  }
+}
+
+/* === 12. FOOTER === */
+
+.footer {
+  padding-block: var(--space-7);
+  border-top: 1px solid var(--color-line);
+}
+
+/* Телефон: всё по центру столбиком. От 768px: логотип слева, текст справа */
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.footer__copy,
+.footer__note {
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 768px) {
+  .footer__inner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    column-gap: var(--space-6);
+    text-align: left;
+  }
+}
 
 /* === 13. АНИМАЦИИ И prefers-reduced-motion === */
 
