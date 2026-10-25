@@ -179,22 +179,25 @@ function initReveal() {
     '.team-card, .gallery__item, .contacts__info, .contacts__map'
   );
 
+  // Проявить блок. После анимации убираем служебные классы, чтобы вернулись собственные
+  // переходы элемента (например, подъём карточки при наведении)
+  function reveal(element) {
+    observer.unobserve(element);
+    const cleanUp = (event) => {
+      if (event.target !== element) return; // переходы вложенных элементов не считаем
+      element.removeEventListener('transitionend', cleanUp);
+      element.classList.remove('reveal', 'is-visible');
+      element.style.removeProperty('transition-delay');
+    };
+    element.addEventListener('transitionend', cleanUp);
+    element.classList.add('is-visible');
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const element = entry.target;
-      observer.unobserve(element);
-
-      // После появления убираем служебные классы, чтобы вернулись собственные
-      // переходы элемента (например, подъём карточки при наведении)
-      const cleanUp = (event) => {
-        if (event.target !== element) return; // переходы вложенных элементов не считаем
-        element.removeEventListener('transitionend', cleanUp);
-        element.classList.remove('reveal', 'is-visible');
-        element.style.removeProperty('transition-delay');
-      };
-      element.addEventListener('transitionend', cleanUp);
-      element.classList.add('is-visible');
+      if (entry.isIntersecting) {
+        reveal(entry.target);
+      }
     });
   }, { rootMargin: '0px 0px -10% 0px' });
 
@@ -204,6 +207,17 @@ function initReveal() {
     element.style.transitionDelay = `${(index % 4) * 80}ms`;
     element.classList.add('reveal');
     observer.observe(element);
+  });
+
+  // Пользователь клавиатуры не должен видеть рамку фокуса вокруг ещё прозрачного блока:
+  // если фокус попал внутрь блока, который не проявился полностью, — показываем его мгновенно
+  document.addEventListener('focusin', (event) => {
+    const element = event.target.closest('.reveal');
+    if (element) {
+      observer.unobserve(element);
+      element.classList.remove('reveal', 'is-visible');
+      element.style.removeProperty('transition-delay');
+    }
   });
 }
 
