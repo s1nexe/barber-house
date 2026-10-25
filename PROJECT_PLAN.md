@@ -275,7 +275,7 @@ barber-house/
 **Делаем:** прогон Lighthouse (в Chrome DevTools), исправление замечаний, мета-теги, Open Graph, favicon, `404.html`.
 
 **Готово, когда:**
-- [ ] Lighthouse (мобильный режим): Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 95.
+- [x] Lighthouse (мобильный режим): Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 95. (Lighthouse 13.5, локальный сервер: 100 / 100 / 100 / 100.)
 - [x] Всю страницу можно пройти клавиатурой (Tab), фокус всегда виден.
 - [x] Общий вес страницы при первой загрузке ≤ 1,5 МБ. (Измерено: 222 КБ, 9 файлов.)
 
@@ -284,7 +284,8 @@ barber-house/
 - Клавиатура: 22 остановки Tab по порядку страницы, рамка фокуса видна на всех.
 - Добавлены: canonical, Open Graph с картинкой 1200×630 (`og-image.jpg`, 92 КБ), `color-scheme`, `apple-touch-icon.png` (180×180).
 - `favicon.ico` не делаем: на GitHub Pages для проекта адрес `/favicon.ico` ведёт в корень `<логин>.github.io`, а не в наш сайт; иконку дают SVG и PNG.
-- Lighthouse ещё не запускался.
+- Lighthouse 13.5 (mobile, запуск через npx вне проекта): до исправлений Performance 87 (FCP 3,1 с, блокировал CSS Google Fonts) → после неблокирующего подключения шрифтов 100 (FCP 1,1 с, CLS 0,005). Accessibility, Best Practices, SEO — 100 в обоих прогонах.
+- Остаются замечания, которые на GitHub Pages исчезнут или ослабнут сами: нет сжатия и кэширования у локального Python-сервера; CSS/JS не минифицированы — сознательно, исходники остаются читаемыми.
 
 ### Этап 11. Публикация на GitHub Pages
 **Делаем:** репозиторий на GitHub, `git push`, включаем Pages (Settings → Pages → ветка `main`, папка `/root`), заполняем `README.md` со ссылкой на сайт.

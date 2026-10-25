@@ -32,10 +32,15 @@
   <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
 
   <!-- Шрифты Google Fonts: preconnect заранее открывает соединение с серверами шрифтов,
-       display=swap показывает текст системным шрифтом, пока фирменный не загрузился -->
+       display=swap показывает текст системным шрифтом, пока фирменный не загрузился.
+       media="print" + onload: файл шрифтов грузится, не задерживая отрисовку страницы,
+       и включается для экрана, как только загрузился. Без JS — обычное подключение в noscript -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap">
+  </noscript>
 
   <link rel="stylesheet" href="css/style.css">
   <!-- Класс js на <html> говорит стилям: «скрипты работают».
