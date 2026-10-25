@@ -841,6 +841,29 @@ html:not(.js) .nav__link {
 
 /* === 7. SERVICES === */
 
+/* Фильтр: кнопки — готовые .btn.btn--outline, здесь только раскладка и активное состояние.
+   Телефон: ровная сетка 2×2. От 576px: кнопки в одну строку по центру */
+.filter {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.filter[hidden] {
+  display: none; /* hidden должен побеждать display: grid */
+}
+
+.filter__btn {
+  padding-inline: var(--space-3);
+}
+
+/* Выбранная категория — золотая заливка, как у основной кнопки */
+.filter__btn[aria-pressed="true"] {
+  background-color: var(--color-gold);
+  color: var(--color-on-gold);
+}
+
 /* Сетка карточек: 1 колонка на телефоне → 2 на планшете → 3 на десктопе */
 .services__list {
   display: grid;
@@ -851,6 +874,18 @@ html:not(.js) .nav__link {
   margin-bottom: var(--space-5);
   font-size: 40px;
   color: var(--color-gold);
+}
+
+@media (min-width: 576px) {
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter__btn {
+    padding-inline: var(--space-5);
+  }
 }
 
 @media (min-width: 768px) {

@@ -228,33 +228,46 @@
       <div class="container">
         <h2 class="section__title" id="services-title">Услуги</h2>
 
+        <!-- Фильтр услуг. hidden: без JS кнопки бесполезны, поэтому их показывает скрипт.
+             aria-pressed — состояние кнопки-переключателя: экранный диктор скажет «нажата».
+             data-filter совпадает с data-category у карточек ниже -->
+        <div class="filter" role="group" aria-label="Фильтр услуг" hidden>
+          <button class="btn btn--outline filter__btn" type="button" data-filter="all" aria-pressed="true">Все</button>
+          <button class="btn btn--outline filter__btn" type="button" data-filter="haircut" aria-pressed="false">Стрижки</button>
+          <button class="btn btn--outline filter__btn" type="button" data-filter="beard" aria-pressed="false">Борода</button>
+          <button class="btn btn--outline filter__btn" type="button" data-filter="complex" aria-pressed="false">Комплексы</button>
+        </div>
+        <!-- Невидимая строка для экранного диктора: сколько услуг показано после выбора категории -->
+        <p class="visually-hidden" aria-live="polite" data-filter-status></p>
+
+        <!-- data-category у карточки — её категория для фильтра: haircut, beard или complex -->
         <ul class="services__list">
-          <li class="card service-card">
+          <li class="card service-card" data-category="haircut">
             <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-comb"></use></svg>
             <h3 class="card__title">Мужская стрижка</h3>
             <p class="card__text">Стрижка ножницами и машинкой с учётом формы головы, мытьё и укладка.</p>
           </li>
-          <li class="card service-card">
+          <li class="card service-card" data-category="haircut">
             <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-clipper"></use></svg>
             <h3 class="card__title">Стрижка машинкой</h3>
             <p class="card__text">Короткая аккуратная стрижка одной или несколькими насадками с плавными переходами.</p>
           </li>
-          <li class="card service-card">
+          <li class="card service-card" data-category="beard">
             <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-beard"></use></svg>
             <h3 class="card__title">Оформление бороды</h3>
             <p class="card__text">Форма под тип лица, чёткий контур и уход маслом или бальзамом.</p>
           </li>
-          <li class="card service-card">
+          <li class="card service-card" data-category="beard">
             <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-razor"></use></svg>
             <h3 class="card__title">Королевское бритьё</h3>
             <p class="card__text">Бритьё опасной бритвой с горячими полотенцами и уходом за кожей после.</p>
           </li>
-          <li class="card service-card">
+          <li class="card service-card" data-category="complex">
             <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-crown"></use></svg>
             <h3 class="card__title">Стрижка и борода</h3>
             <p class="card__text">Комплекс за один визит: стрижка и оформление бороды в едином стиле.</p>
           </li>
-          <li class="card service-card">
+          <li class="card service-card" data-category="haircut">
             <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-smile"></use></svg>
             <h3 class="card__title">Детская стрижка</h3>
             <p class="card__text">Аккуратная стрижка для юных гостей в спокойной обстановке.</p>

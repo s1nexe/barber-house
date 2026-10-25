@@ -370,7 +370,45 @@ function initReveal() {
   });
 }
 
-// === 7. Лайтбокс галереи ===
+// === 7. Фильтр услуг ===
+
+function initServicesFilter() {
+  const filter = document.querySelector('.filter');
+  const status = document.querySelector('[data-filter-status]');
+  if (!filter) return;
+
+  const buttons = [...filter.querySelectorAll('[data-filter]')];
+  const cards = [...document.querySelectorAll('.service-card[data-category]')];
+
+  function applyFilter(category) {
+    // Отбираем из массива карточек те, что подходят под категорию («all» — все)
+    const visible = cards.filter((card) => category === 'all' || card.dataset.category === category);
+
+    // Подходящие показываем, остальные прячем атрибутом hidden — карточки не удаляются и не копируются
+    cards.forEach((card) => {
+      card.hidden = !visible.includes(card);
+    });
+
+    // Активная кнопка: aria-pressed="true" (по нему же CSS красит кнопку золотом)
+    buttons.forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.filter === category));
+    });
+
+    status.textContent = `Показано услуг: ${visible.length} из ${cards.length}`;
+  }
+
+  // Один обработчик на всю группу кнопок: клик по любой кнопке «всплывает» до .filter
+  filter.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-filter]');
+    if (button) {
+      applyFilter(button.dataset.filter);
+    }
+  });
+
+  filter.hidden = false; // кнопки нужны только со скриптом — показываем их здесь
+}
+
+// === 8. Лайтбокс галереи ===
 
 function initLightbox() {
   const links = [...document.querySelectorAll('.gallery__link')];
@@ -427,7 +465,7 @@ function initLightbox() {
   });
 }
 
-// === 8. Текущий год в футере ===
+// === 9. Текущий год в футере ===
 
 function initYear() {
   const year = String(new Date().getFullYear());
@@ -445,5 +483,6 @@ initResizeGuard();
 initHeaderScroll();
 initActiveLink();
 initReveal();
+initServicesFilter();
 initLightbox();
 initYear();
