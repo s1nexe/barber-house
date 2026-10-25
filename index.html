@@ -34,6 +34,69 @@
   <!-- Ссылка для пользователей клавиатуры: появляется при первом нажатии Tab -->
   <a class="skip-link" href="#main">Перейти к содержимому</a>
 
+  <!-- ===================== SVG-СПРАЙТ =====================
+       Все иконки сайта в одном месте. Сам спрайт не виден; иконка выводится так:
+       <svg class="icon"><use href="#icon-scissors"></use></svg>
+       Цвет и толщину линий задаёт CSS (класс .icon). Иконки нарисованы для этого проекта. -->
+  <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <!-- Ножницы -->
+    <symbol id="icon-scissors" viewBox="0 0 24 24">
+      <circle cx="6.5" cy="17.5" r="2.5"/>
+      <circle cx="17.5" cy="17.5" r="2.5"/>
+      <path d="M8.3 15.7 18 4M15.7 15.7 6 4"/>
+    </symbol>
+    <!-- Флакон -->
+    <symbol id="icon-bottle" viewBox="0 0 24 24">
+      <path d="M10 3h4v3h-4z"/>
+      <path d="M9 6h6l1 3v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9z"/>
+      <path d="M8 13h8"/>
+    </symbol>
+    <!-- Чашка кофе -->
+    <symbol id="icon-cup" viewBox="0 0 24 24">
+      <path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/>
+      <path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/>
+      <path d="M8 3v3M12 3v3"/>
+    </symbol>
+    <!-- Часы -->
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 7v5l3 2"/>
+    </symbol>
+    <!-- Расчёска -->
+    <symbol id="icon-comb" viewBox="0 0 24 24">
+      <path d="M3 7h18v4H3z"/>
+      <path d="M5 11v6M8 11v6M11 11v6M14 11v6M17 11v6M20 11v4"/>
+    </symbol>
+    <!-- Машинка для стрижки -->
+    <symbol id="icon-clipper" viewBox="0 0 24 24">
+      <path d="M7 4h10v5H7z"/>
+      <path d="M8 9h8v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z"/>
+      <path d="M9 4V2M12 4V2M15 4V2M12 13v3"/>
+    </symbol>
+    <!-- Борода -->
+    <symbol id="icon-beard" viewBox="0 0 24 24">
+      <path d="M5 5v5c0 5.5 3 10 7 10s7-4.5 7-10V5"/>
+      <path d="M8 12c1.5-1.2 2.7-1.2 4 0 1.3-1.2 2.5-1.2 4 0"/>
+      <path d="M11 16h2"/>
+    </symbol>
+    <!-- Опасная бритва -->
+    <symbol id="icon-razor" viewBox="0 0 24 24">
+      <path d="M6 7h12.5a2.5 2.5 0 0 1 2.5 2.5V12H6z"/>
+      <path d="M6.5 12 2.6 19.4a1.2 1.2 0 0 0 2 1.2L9 12"/>
+    </symbol>
+    <!-- Корона — комплексная услуга -->
+    <symbol id="icon-crown" viewBox="0 0 24 24">
+      <path d="M4 17 3 7l5 4 4-6 4 6 5-4-1 10z"/>
+      <path d="M4 20h16"/>
+    </symbol>
+    <!-- Улыбка — детская стрижка -->
+    <symbol id="icon-smile" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M8 14c1 1.3 2.4 2 4 2s3-.7 4-2"/>
+      <path d="M9 9.5v.5M15 9.5v.5"/>
+    </symbol>
+  </svg>
+
   <!-- ===================== HEADER ===================== -->
   <header class="header">
     <div class="container header__inner">
@@ -81,7 +144,37 @@
     <section class="section about" id="about" aria-labelledby="about-title">
       <div class="container">
         <h2 class="section__title" id="about-title">О нас</h2>
-        <p>Раздел появится на этапе 4.</p>
+
+        <div class="about__inner">
+          <div class="about__text">
+            <p class="about__lead">BARBER HOUSE — пространство, где мужская стрижка снова становится ритуалом. Мы соединяем традиции классического барбершопа с современными техниками, чтобы результат подчёркивал характер и легко укладывался дома.</p>
+            <p>Здесь не торопятся. Мастер начинает с разговора, подбирает форму под тип лица и волос и объясняет, как ухаживать за стрижкой и бородой между визитами.</p>
+            <p>Мы хотим, чтобы визит был не обязанностью, а временем для себя — местом, куда хочется возвращаться.</p>
+          </div>
+
+          <ul class="features">
+            <li class="feature">
+              <span class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#icon-scissors"></use></svg></span>
+              <h3 class="feature__title">Классика и современность</h3>
+              <p class="feature__text">Традиционные мужские стрижки и актуальные техники: фейды, текстуры, кроп.</p>
+            </li>
+            <li class="feature">
+              <span class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#icon-bottle"></use></svg></span>
+              <h3 class="feature__title">Премиальная косметика</h3>
+              <p class="feature__text">Средства для укладки и ухода за бородой подбираем под тип волос и кожи.</p>
+            </li>
+            <li class="feature">
+              <span class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#icon-cup"></use></svg></span>
+              <h3 class="feature__title">Атмосфера мужского клуба</h3>
+              <p class="feature__text">Спокойная обстановка, хорошая музыка и чашка кофе, пока ждёте мастера.</p>
+            </li>
+            <li class="feature">
+              <span class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#icon-clock"></use></svg></span>
+              <h3 class="feature__title">Время на каждого гостя</h3>
+              <p class="feature__text">Записываем с запасом по времени, чтобы мастер работал без спешки.</p>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -89,7 +182,39 @@
     <section class="section section--alt services" id="services" aria-labelledby="services-title">
       <div class="container">
         <h2 class="section__title" id="services-title">Услуги</h2>
-        <p>Раздел появится на этапе 4.</p>
+
+        <ul class="services__list">
+          <li class="card service-card">
+            <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-comb"></use></svg>
+            <h3 class="card__title">Мужская стрижка</h3>
+            <p class="card__text">Стрижка ножницами и машинкой с учётом формы головы, мытьё и укладка.</p>
+          </li>
+          <li class="card service-card">
+            <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-clipper"></use></svg>
+            <h3 class="card__title">Стрижка машинкой</h3>
+            <p class="card__text">Короткая аккуратная стрижка одной или несколькими насадками с плавными переходами.</p>
+          </li>
+          <li class="card service-card">
+            <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-beard"></use></svg>
+            <h3 class="card__title">Оформление бороды</h3>
+            <p class="card__text">Форма под тип лица, чёткий контур и уход маслом или бальзамом.</p>
+          </li>
+          <li class="card service-card">
+            <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-razor"></use></svg>
+            <h3 class="card__title">Королевское бритьё</h3>
+            <p class="card__text">Бритьё опасной бритвой с горячими полотенцами и уходом за кожей после.</p>
+          </li>
+          <li class="card service-card">
+            <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-crown"></use></svg>
+            <h3 class="card__title">Стрижка и борода</h3>
+            <p class="card__text">Комплекс за один визит: стрижка и оформление бороды в едином стиле.</p>
+          </li>
+          <li class="card service-card">
+            <svg class="icon service-card__icon" aria-hidden="true"><use href="#icon-smile"></use></svg>
+            <h3 class="card__title">Детская стрижка</h3>
+            <p class="card__text">Аккуратная стрижка для юных гостей в спокойной обстановке.</p>
+          </li>
+        </ul>
       </div>
     </section>
 
