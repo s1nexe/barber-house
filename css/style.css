@@ -791,9 +791,126 @@ html:not(.js) .nav__link {
   }
 }
 
-/* === 8. PRICES — этап 5 === */
+/* === 8. PRICES === */
 
-/* === 9. TEAM — этап 5 === */
+.price-list {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+/* Строка прайса: название · · · · · цена.
+   Пунктир — псевдоэлемент ::after, который растягивается между названием и ценой.
+   order меняет порядок показа: название (0) → пунктир (1) → цена (2) */
+.price-list__item {
+  display: flex;
+  align-items: baseline; /* пунктир и цена — на уровне первой строки названия */
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+}
+
+.price-list__item::after {
+  content: "";
+  order: 1;
+  flex: 1 0 1.5rem; /* растягивается, но не сжимается уже 1.5rem — пунктир виден всегда */
+  border-bottom: 1px dotted var(--color-gold-dark);
+}
+
+.price-list__name {
+  flex: 0 1 auto; /* может сжиматься: длинное название переносится, а цена остаётся на месте */
+  font-family: var(--font-heading);
+  font-size: var(--fs-base); /* на телефоне 16px — обычные названия помещаются в одну строку */
+}
+
+/* Длительность — отдельной строкой под названием */
+.price-list__duration {
+  display: block;
+  margin-top: var(--space-1);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+}
+
+.price-list__price {
+  order: 2;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: var(--color-gold);
+  white-space: nowrap;
+  /* Playfair по умолчанию рисует «старинные» цифры разной высоты;
+     для цен включаем ровные (lining) и одинаковой ширины (tabular) */
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.prices__note {
+  margin-top: var(--space-6);
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.prices__action {
+  margin-top: var(--space-6);
+  text-align: center;
+}
+
+@media (min-width: 576px) {
+  .price-list__item {
+    gap: var(--space-3);
+  }
+
+  .price-list__name,
+  .price-list__price {
+    font-size: var(--fs-lead);
+  }
+}
+
+/* === 9. TEAM === */
+
+/* Сетка: 1 колонка → 2 (от 576px) → 4 (от 1280px; на 1024px четыре карточки слишком узкие) */
+.team__list {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.team-card {
+  text-align: center;
+}
+
+/* Круглая «рамка для фото» с силуэтом внутри */
+.team-card__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  margin-bottom: var(--space-5);
+  font-size: 56px; /* = размер силуэта */
+  color: var(--color-gold);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+}
+
+.team__note {
+  margin-top: var(--space-6);
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+@media (min-width: 576px) {
+  .team__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .team__list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 
 /* === 10. GALLERY — этап 6 === */
 

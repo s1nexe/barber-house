@@ -95,6 +95,11 @@
       <path d="M8 14c1 1.3 2.4 2 4 2s3-.7 4-2"/>
       <path d="M9 9.5v.5M15 9.5v.5"/>
     </symbol>
+    <!-- Силуэт — вместо фото мастера -->
+    <symbol id="icon-person" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+    </symbol>
   </svg>
 
   <!-- ===================== HEADER ===================== -->
@@ -222,8 +227,41 @@
     <section class="section prices" id="prices" aria-labelledby="prices-title">
       <div class="container">
         <h2 class="section__title" id="prices-title">Цены</h2>
-        <p>Раздел появится на этапе 5.</p>
-        <a class="btn btn--primary" href="#contacts" data-booking>Записаться</a>
+
+        <!-- Список определений: dt — услуга и длительность, dd — цена.
+             &nbsp; (неразрывный пробел) не даёт цене разорваться на две строки: «2 000 ₽» -->
+        <dl class="price-list">
+          <div class="price-list__item">
+            <dt class="price-list__name">Мужская стрижка <span class="price-list__duration">60 мин</span></dt>
+            <dd class="price-list__price">от 2&nbsp;000&nbsp;₽</dd>
+          </div>
+          <div class="price-list__item">
+            <dt class="price-list__name">Стрижка машинкой <span class="price-list__duration">30 мин</span></dt>
+            <dd class="price-list__price">1&nbsp;200&nbsp;₽</dd>
+          </div>
+          <div class="price-list__item">
+            <dt class="price-list__name">Оформление бороды <span class="price-list__duration">40 мин</span></dt>
+            <dd class="price-list__price">1&nbsp;500&nbsp;₽</dd>
+          </div>
+          <div class="price-list__item">
+            <dt class="price-list__name">Королевское бритьё <span class="price-list__duration">45 мин</span></dt>
+            <dd class="price-list__price">2&nbsp;200&nbsp;₽</dd>
+          </div>
+          <div class="price-list__item">
+            <dt class="price-list__name">Стрижка и борода <span class="price-list__duration">90 мин</span></dt>
+            <dd class="price-list__price">от 3&nbsp;200&nbsp;₽</dd>
+          </div>
+          <div class="price-list__item">
+            <dt class="price-list__name">Детская стрижка <span class="price-list__duration">40 мин</span></dt>
+            <dd class="price-list__price">1&nbsp;400&nbsp;₽</dd>
+          </div>
+        </dl>
+
+        <p class="prices__note">Цены демонстрационные: сайт — учебный проект.</p>
+
+        <div class="prices__action">
+          <a class="btn btn--primary" href="#contacts" data-booking>Записаться</a>
+        </div>
       </div>
     </section>
 
@@ -231,7 +269,32 @@
     <section class="section section--alt team" id="team" aria-labelledby="team-title">
       <div class="container">
         <h2 class="section__title" id="team-title">Команда</h2>
-        <p>Раздел появится на этапе 5.</p>
+
+        <!-- Только роли, без имён и фото: реальных сотрудников у учебного проекта нет -->
+        <ul class="team__list">
+          <li class="card team-card">
+            <span class="team-card__avatar"><svg class="icon" aria-hidden="true"><use href="#icon-person"></use></svg></span>
+            <h3 class="card__title">Арт-директор</h3>
+            <p class="card__text">Авторские стрижки, обучение мастеров и контроль качества.</p>
+          </li>
+          <li class="card team-card">
+            <span class="team-card__avatar"><svg class="icon" aria-hidden="true"><use href="#icon-person"></use></svg></span>
+            <h3 class="card__title">Старший барбер</h3>
+            <p class="card__text">Сложные стрижки ножницами, классические формы и королевское бритьё.</p>
+          </li>
+          <li class="card team-card">
+            <span class="team-card__avatar"><svg class="icon" aria-hidden="true"><use href="#icon-person"></use></svg></span>
+            <h3 class="card__title">Барбер</h3>
+            <p class="card__text">Фейды, стрижки машинкой и оформление бороды.</p>
+          </li>
+          <li class="card team-card">
+            <span class="team-card__avatar"><svg class="icon" aria-hidden="true"><use href="#icon-person"></use></svg></span>
+            <h3 class="card__title">Барбер-стажёр</h3>
+            <p class="card__text">Базовые стрижки и оформление бороды под контролем старшего мастера.</p>
+          </li>
+        </ul>
+
+        <p class="team__note">Имена и фотографии мастеров появятся, когда сформируется команда.</p>
       </div>
     </section>
 
