@@ -398,6 +398,9 @@ section[id] {
 
 /* --- Логотип (используется и в шапке, и в футере) --- */
 .logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px; /* по логотипу удобно попасть пальцем */
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 600;
@@ -631,6 +634,9 @@ html:not(.js) .nav__link {
   .nav__link,
   html:not(.js) .nav__link {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px; /* 1024px — это и iPad в горизонтальном положении, там нажимают пальцем */
     padding: var(--space-2) 0;
     white-space: nowrap; /* «О нас» не разрывается на две строки */
     font-family: var(--font-body);
@@ -811,8 +817,7 @@ html:not(.js) .nav__link {
 }
 
 .feature__text {
-  font-size: var(--fs-small);
-  color: var(--color-text-muted);
+  color: var(--color-text-muted); /* обычный текст — 16px, как и весь основной текст */
 }
 
 @media (min-width: 576px) {
