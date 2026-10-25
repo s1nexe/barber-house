@@ -105,6 +105,16 @@
       <path d="M21 3 3 10.5l7 2.5 2.5 7z"/>
       <path d="M21 3 10 13"/>
     </symbol>
+    <!-- Крестик и стрелки — кнопки лайтбокса галереи -->
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="M6 6l12 12M18 6 6 18"/>
+    </symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+      <path d="M15 5l-7 7 7 7"/>
+    </symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+      <path d="M9 5l7 7-7 7"/>
+    </symbol>
     <!-- Силуэт — вместо фото мастера -->
     <symbol id="icon-person" viewBox="0 0 24 24">
       <circle cx="12" cy="8" r="4"/>
@@ -393,7 +403,8 @@
                   <svg class="icon contacts__icon" aria-hidden="true"><use href="#icon-send"></use></svg>
                   Запись
                 </dt>
-                <dd class="contacts__value">Через Telegram — ссылка появится позже</dd>
+                <!-- data-booking-note: когда в CONFIG появится ссылка, скрипт уберёт «ссылка появится позже» -->
+                <dd class="contacts__value" data-booking-note>Через Telegram — ссылка появится позже</dd>
               </div>
             </dl>
 
