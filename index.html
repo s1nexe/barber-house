@@ -164,7 +164,7 @@
         </ul>
       </nav>
 
-      <!-- data-booking: по этому атрибуту скрипт найдёт все кнопки записи и подставит ссылку на мессенджер.
+      <!-- data-booking: по этому атрибуту скрипт найдёт все кнопки записи и откроет по ним окно записи.
            Без скрипта кнопка просто ведёт к контактам. -->
       <a class="btn btn--primary header__btn" href="#contacts" data-booking>Записаться</a>
     </div>
@@ -451,5 +451,52 @@
       <p class="footer__note">Учебный проект. Все данные на сайте демонстрационные.</p>
     </div>
   </footer>
+
+  <!-- ===================== ОКНО ЗАПИСИ =====================
+       <dialog> — встроенное в браузер модальное окно. Скрипт открывает его кнопками [data-booking].
+       Форма демонстрационная: method="dialog" не отправляет данные никуда, даже если скрипт не сработал.
+       Список услуг скрипт заполнит из прайса, чтобы названия и цены были в одном месте. -->
+  <dialog class="modal" id="booking-modal" aria-labelledby="booking-title" aria-describedby="booking-desc">
+    <div class="modal__content">
+      <button class="modal__close" type="button" aria-label="Закрыть окно записи" data-modal-close>
+        <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+      </button>
+
+      <h2 class="modal__title" id="booking-title">Запись в BARBER HOUSE</h2>
+      <p class="modal__text" id="booking-desc">Демонстрационная форма: данные никуда не отправляются и не сохраняются.</p>
+
+      <form class="form" id="booking-form" method="dialog" novalidate>
+        <div class="form__field">
+          <label class="form__label" for="booking-name">Имя</label>
+          <!-- autofocus: при открытии окна фокус сразу попадает в первое поле -->
+          <input class="form__input" id="booking-name" name="name" type="text" autocomplete="name" maxlength="50" required aria-describedby="booking-name-error" autofocus>
+          <p class="form__error" id="booking-name-error" hidden></p>
+        </div>
+
+        <div class="form__field">
+          <label class="form__label" for="booking-phone">Телефон</label>
+          <input class="form__input" id="booking-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="+7 900 000-00-00" required aria-describedby="booking-phone-error">
+          <p class="form__error" id="booking-phone-error" hidden></p>
+        </div>
+
+        <div class="form__field">
+          <label class="form__label" for="booking-service">Услуга</label>
+          <div class="form__select-wrap">
+            <select class="form__input form__select" id="booking-service" name="service" required aria-describedby="booking-service-error">
+              <option value="">Выберите услугу</option>
+            </select>
+          </div>
+          <p class="form__error" id="booking-service-error" hidden></p>
+        </div>
+
+        <button class="btn btn--primary form__submit" type="submit">Отправить заявку</button>
+      </form>
+
+      <!-- Показывается, только когда в CONFIG задана ссылка на мессенджер -->
+      <p class="modal__alt" data-booking-alt hidden>
+        Удобнее в мессенджере? <a class="modal__link" href="#contacts" target="_blank" rel="noopener noreferrer">Написать</a>
+      </p>
+    </div>
+  </dialog>
 </body>
 </html>

@@ -23,7 +23,8 @@
   --color-gold-faint: rgba(201, 165, 76, 0.035); /* едва заметная фактура */
   --color-header-bg: rgba(14, 14, 14, 0.85);     /* полупрозрачная шапка */
   --color-header-bg-solid: rgba(14, 14, 14, 0.97); /* шапка после прокрутки */
-  --color-backdrop: rgba(0, 0, 0, 0.92);         /* затемнение под лайтбоксом */
+  --color-backdrop: rgba(0, 0, 0, 0.92);         /* затемнение под модальными окнами */
+  --color-error: #FF8A80;                        /* текст и рамка ошибки в форме */
   --color-control-bg: rgba(30, 30, 30, 0.8);     /* кнопки поверх фото */
   --shadow-header: 0 4px 24px rgba(0, 0, 0, 0.5);
   --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.45);
@@ -103,6 +104,9 @@ ol[class] {
 html {
   -webkit-text-size-adjust: 100%; /* iPhone не увеличивает текст при повороте экрана */
   text-size-adjust: 100%;
+  /* Место под полосу прокрутки зарезервировано всегда: когда модальное окно
+     блокирует прокрутку, страница не «прыгает» вбок на ширину полосы */
+  scrollbar-gutter: stable;
 }
 
 /* Плавная прокрутка по якорям — только если человек не отключил анимации */
@@ -1311,7 +1315,181 @@ html:not(.js) .nav__link {
   }
 }
 
-/* === 13. АНИМАЦИИ И prefers-reduced-motion === */
+/* === 13. ОКНО ЗАПИСИ === */
+
+/* Окно-карточка по центру экрана. Отступы — у внутреннего блока, а у самого <dialog> их нет:
+   так клик по полям окна никогда не считается кликом по затемнению */
+.modal {
+  width: calc(100% - 2 * var(--container-padding));
+  max-width: 32rem;
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow-y: auto; /* на низком экране содержимое прокручивается внутри окна */
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+/* Подстраховка для очень старых браузеров без <dialog>: закрытое окно не показываем */
+.modal:not([open]) {
+  display: none;
+}
+
+.modal[open] {
+  animation: modal-in var(--transition-slow);
+}
+
+.modal::backdrop {
+  background-color: var(--color-backdrop);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+}
+
+.modal__content {
+  position: relative;
+  padding: var(--space-7) var(--space-5) var(--space-6);
+}
+
+.modal__close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: 24px; /* = размер иконки */
+  color: var(--color-gold);
+  border-radius: 50%;
+  transition: background-color var(--transition);
+}
+
+@media (hover: hover) {
+  .modal__close:hover {
+    background-color: var(--color-bg);
+  }
+}
+
+.modal__title {
+  margin-bottom: var(--space-2);
+  padding-right: var(--space-7); /* заголовок не заезжает под крестик */
+  font-size: 1.5rem;
+}
+
+.modal__text {
+  margin-bottom: var(--space-6);
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+}
+
+.modal__alt {
+  margin-top: var(--space-5);
+  font-size: var(--fs-small);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.modal__link {
+  color: var(--color-gold);
+}
+
+/* --- Форма --- */
+.form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.form__label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.form__input {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--fs-base); /* 16px: на iPhone поле не увеличивает страницу при фокусе */
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  transition: border-color var(--transition);
+}
+
+.form__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.form__input:focus {
+  border-color: var(--color-gold);
+}
+
+.form__input[aria-invalid="true"] {
+  border-color: var(--color-error);
+}
+
+/* Свой треугольник у списка: стандартная стрелка браузера отключена */
+.form__select-wrap {
+  position: relative;
+}
+
+.form__select-wrap::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid var(--color-gold);
+  border-bottom: 1.5px solid var(--color-gold);
+  transform: translateY(-75%) rotate(45deg);
+  pointer-events: none; /* клик проходит сквозь стрелку в список */
+}
+
+.form__select {
+  padding-right: var(--space-7);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form__error {
+  margin-top: var(--space-2);
+  font-size: var(--fs-small);
+  color: var(--color-error);
+}
+
+.form__submit {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+@media (min-width: 576px) {
+  .modal__content {
+    padding: var(--space-7);
+  }
+
+  .modal__title {
+    font-size: 1.75rem;
+  }
+}
+
+/* === 14. АНИМАЦИИ И prefers-reduced-motion === */
 
 /* Появление блоков при прокрутке: скрипт ставит .reveal (блок спрятан и чуть ниже),
    а когда блок доходит до экрана — .is-visible (плавно проявляется на месте).

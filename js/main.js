@@ -27,7 +27,50 @@ function icon(name) {
   return `<svg class="icon" aria-hidden="true"><use href="#icon-${name}"></use></svg>`;
 }
 
-// === 2. Кнопки записи [data-booking] ===
+// Общая логика модальных окон <dialog> (окно записи и лайтбокс галереи).
+// showModal() сам держит фокус внутри окна (остальная страница становится недоступной)
+// и закрывает окно по Esc. Здесь добавляем то, чего браузер не делает:
+// блокировку прокрутки фона, закрытие кликом по затемнению и возврат фокуса.
+// Возвращает функцию open(кнопка, которая открыла окно)
+function setupModal(dialog) {
+  let opener = null;
+  let pressedOnBackdrop = false;
+
+  // Клик по затемнению — это клик по самому <dialog>, а не по его содержимому.
+  // Проверяем и нажатие, и отпускание: если выделяли текст в поле и отпустили мышь
+  // на фоне, окно не закроется
+  dialog.addEventListener('pointerdown', (event) => {
+    pressedOnBackdrop = event.target === dialog;
+  });
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog && pressedOnBackdrop) {
+      dialog.close();
+    }
+  });
+
+  // Срабатывает при любом закрытии: крестик, фон, Esc
+  dialog.addEventListener('close', () => {
+    root.classList.remove('is-locked');
+    if (opener) {
+      opener.focus(); // фокус возвращается туда, откуда окно открыли
+    }
+  });
+
+  return function open(trigger) {
+    opener = trigger;
+    dialog.showModal();
+    root.classList.add('is-locked'); // страница под окном не прокручивается
+
+    // Обычно браузер сам ставит фокус в поле с autofocus. Подстраховка на случай,
+    // если фокус достался самому окну (такое один раз наблюдалось в Chrome)
+    const autofocusField = dialog.querySelector('[autofocus]');
+    if (autofocusField && document.activeElement === dialog) {
+      autofocusField.focus();
+    }
+  };
+}
+
+// === 2. Запись: кнопки [data-booking] и окно записи ===
 
 // Всплывающая подсказка внизу экрана.
 // role="status" — экранный диктор прочитает текст, как только он появится
@@ -43,9 +86,122 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 4000);
 }
 
+// Правила проверки полей формы записи: возвращают текст ошибки или пустую строку
+const BOOKING_RULES = {
+  name: (value) => (value.trim().length >= 2 ? '' : 'Введите имя — минимум 2 буквы.'),
+  phone: (value) => {
+    if (/[^\d\s()+-]/.test(value)) {
+      return 'В номере могут быть только цифры, пробелы, скобки, «+» и «-».';
+    }
+    const digits = value.replace(/\D/g, '').length;
+    return digits >= 10 && digits <= 15 ? '' : 'Введите номер телефона: от 10 до 15 цифр.';
+  },
+  service: (value) => (value ? '' : 'Выберите услугу.'),
+};
+
+// Окно записи. Возвращает функцию открытия окна или null, если окна нет
+// или браузер не поддерживает <dialog>
+function initBookingModal() {
+  const dialog = document.getElementById('booking-modal');
+  const form = document.getElementById('booking-form');
+  if (!dialog || !form || typeof HTMLDialogElement !== 'function') return null;
+
+  const open = setupModal(dialog);
+  const fields = Object.keys(BOOKING_RULES).map((name) => form.elements[name]);
+
+  // Список услуг берём из прайса: названия и цены хранятся в одном месте
+  const select = form.elements.service;
+  document.querySelectorAll('.price-list__item').forEach((item) => {
+    const name = item.querySelector('.price-list__name').firstChild.textContent.trim();
+    const price = item.querySelector('.price-list__price').textContent.trim();
+    select.add(new Option(`${name} — ${price}`, name));
+  });
+
+  // Если в CONFIG есть ссылка на мессенджер — показываем её в окне как второй способ записи
+  if (CONFIG.bookingUrl) {
+    const alt = dialog.querySelector('[data-booking-alt]');
+    const link = alt.querySelector('a');
+    link.href = CONFIG.bookingUrl;
+    link.textContent = `Написать в ${CONFIG.messengerName}`;
+    alt.hidden = false;
+  }
+
+  // Ошибка показывается под полем; aria-invalid и aria-describedby
+  // сообщают о ней экранному диктору
+  function showError(field, message) {
+    const error = document.getElementById(field.getAttribute('aria-describedby'));
+    error.textContent = message;
+    error.hidden = !message;
+    if (message) {
+      field.setAttribute('aria-invalid', 'true');
+    } else {
+      field.removeAttribute('aria-invalid');
+    }
+  }
+
+  function validate(field) {
+    const message = BOOKING_RULES[field.name](field.value);
+    showError(field, message);
+    return !message;
+  }
+
+  // Поле с ошибкой перепроверяем при каждом вводе — ошибка исчезает сразу после исправления
+  fields.forEach((field) => {
+    const eventName = field.tagName === 'SELECT' ? 'change' : 'input';
+    field.addEventListener(eventName, () => {
+      if (field.hasAttribute('aria-invalid')) {
+        validate(field);
+      }
+    });
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); // форма демонстрационная: ничего не отправляем
+    const invalid = fields.filter((field) => !validate(field)); // проверяем все поля сразу
+    if (invalid.length) {
+      invalid[0].focus(); // фокус — на первое поле с ошибкой
+      return;
+    }
+    dialog.close();
+    showToast('Демонстрация: заявка не отправлена');
+  });
+
+  dialog.querySelector('[data-modal-close]').addEventListener('click', () => dialog.close());
+
+  // Любое закрытие стирает введённое: персональные данные не остаются даже в открытой странице
+  dialog.addEventListener('close', () => {
+    form.reset();
+    fields.forEach((field) => showError(field, ''));
+  });
+
+  return open;
+}
+
 function initBooking() {
   const buttons = document.querySelectorAll('[data-booking]');
+  document.body.append(toast);
 
+  if (CONFIG.bookingUrl) {
+    const note = document.querySelector('[data-booking-note]');
+    if (note) {
+      note.textContent = `Через ${CONFIG.messengerName}`;
+    }
+  }
+
+  // Основной вариант: кнопки «Записаться» открывают окно записи
+  const openBooking = initBookingModal();
+  if (openBooking) {
+    buttons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.preventDefault(); // не переходим к #contacts
+        openBooking(button);
+      });
+    });
+    return;
+  }
+
+  // Запасной вариант для браузеров без <dialog> — как было до появления окна:
+  // ссылка на мессенджер или переход к контактам с подсказкой
   if (CONFIG.bookingUrl) {
     buttons.forEach((button) => {
       button.href = CONFIG.bookingUrl;
@@ -56,16 +212,9 @@ function initBooking() {
         `${button.textContent.trim()} через ${CONFIG.messengerName} (откроется в новой вкладке)`
       );
     });
-
-    const note = document.querySelector('[data-booking-note]');
-    if (note) {
-      note.textContent = `Через ${CONFIG.messengerName}`;
-    }
     return;
   }
 
-  // Ссылки нет: переход к #contacts происходит сам (это обычная ссылка), добавляем подсказку
-  document.body.append(toast);
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
       showToast(`Онлайн-запись через ${CONFIG.messengerName} скоро откроется.`);
@@ -228,8 +377,7 @@ function initLightbox() {
   // Старый браузер без <dialog> — ссылки просто откроют фото в новой вкладке
   if (!links.length || typeof HTMLDialogElement !== 'function') return;
 
-  // <dialog> с showModal() сам удерживает фокус внутри, закрывается по Esc
-  // и делает остальную страницу недоступной, пока открыт
+  // Окно на <dialog>: фокус, Esc, затемнение и блокировку прокрутки даёт setupModal()
   const dialog = document.createElement('dialog');
   dialog.className = 'lightbox';
   dialog.setAttribute('aria-label', 'Просмотр фотографии');
@@ -245,11 +393,11 @@ function initLightbox() {
   `;
   document.body.append(dialog);
 
+  const openLightbox = setupModal(dialog);
   const image = dialog.querySelector('.lightbox__img');
   const caption = dialog.querySelector('.lightbox__caption');
   const counter = dialog.querySelector('.lightbox__counter');
   let current = 0;
-  let opener = null;
 
   function show(index) {
     current = (index + links.length) % links.length; // по кругу: после последнего — первое
@@ -264,10 +412,8 @@ function initLightbox() {
   links.forEach((link, index) => {
     link.addEventListener('click', (event) => {
       event.preventDefault(); // не открываем файл в новой вкладке
-      opener = link;
       show(index);
-      dialog.showModal();
-      root.classList.add('is-locked');
+      openLightbox(link);
     });
   });
 
@@ -278,21 +424,6 @@ function initLightbox() {
   dialog.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowLeft') show(current - 1);
     if (event.key === 'ArrowRight') show(current + 1);
-  });
-
-  // Клик по тёмному фону (мимо фото и кнопок) закрывает лайтбокс
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) {
-      dialog.close();
-    }
-  });
-
-  // Срабатывает при любом закрытии: крестик, фон, Esc
-  dialog.addEventListener('close', () => {
-    root.classList.remove('is-locked');
-    if (opener) {
-      opener.focus(); // фокус возвращается на фото, которое открывали
-    }
   });
 }
 
